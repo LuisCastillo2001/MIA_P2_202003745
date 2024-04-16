@@ -1,7 +1,6 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+ 
+
   text-align: center;
 }
 
@@ -39,4 +38,32 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.prueba{
+  display: block;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.contendor1{
+  display: flex;
+
+  margin-top: 10px;
+
+}
+
+img{
+  display: flex;
+  margin-left: 10%;
+}
+
+.boton_img{
+  width: auto;
+  height: 50px;
+  background-color: #25383d7a;
+}
+
+.boton_prueba{
+  margin-top: 10px;
 }
