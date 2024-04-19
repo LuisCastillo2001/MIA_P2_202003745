@@ -4,7 +4,6 @@ import (
 	"Proyecto_1/Structs"
 	"bytes"
 	"encoding/binary"
-	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -40,20 +39,20 @@ func (rmuser *Rmuser) identifyParameter(parameter string) {
 
 func (rmuser *Rmuser) RemoveUser() {
 	if !Compare(Logged.User, "root") {
-		fmt.Println("RMUSER", "Solo el usuario \"root\" puede acceder a estos comandos.")
+		Concatenar("RMUSER" + "Solo el usuario \"root\" puede acceder a estos comandos.")
 		return
 	}
 
 	var path string
 	partition := getMount(Logged.Id, &path)
 	if partition.Part_start == -1 {
-		fmt.Println("RMUSER", "No se encontró la partición montada con el id: "+Logged.Id)
+		Concatenar("RMUSER" + "No se encontró la partición montada con el id: " + Logged.Id)
 		return
 	}
 	//file, err := os.OpenFile(strings.ReplaceAll(path, "\"", ""), os.O_WRONLY, os.ModeAppend)
 	file, err := os.Open(strings.ReplaceAll(path, "\"", ""))
 	if err != nil {
-		fmt.Println("RMUSER", "No se ha encontrado el disco.")
+		Concatenar("RMUSER" + "No se ha encontrado el disco.")
 		return
 	}
 
@@ -63,7 +62,7 @@ func (rmuser *Rmuser) RemoveUser() {
 	buffer := bytes.NewBuffer(data)
 	err_ := binary.Read(buffer, binary.BigEndian, &super)
 	if err_ != nil {
-		fmt.Println("RMUSER", "Error al leer el archivo")
+		Concatenar("RMUSER" + "Error al leer el archivo")
 		return
 	}
 	inode := Structs.NewInodos()
@@ -72,7 +71,7 @@ func (rmuser *Rmuser) RemoveUser() {
 	buffer = bytes.NewBuffer(data)
 	err_ = binary.Read(buffer, binary.BigEndian, &inode)
 	if err_ != nil {
-		fmt.Println("RMUSER", "Error al leer el archivo")
+		Concatenar("RMUSER" + "Error al leer el archivo")
 		return
 	}
 
@@ -89,7 +88,7 @@ func (rmuser *Rmuser) RemoveUser() {
 		err_ = binary.Read(buffer, binary.BigEndian, &fb)
 
 		if err_ != nil {
-			fmt.Println("RMUSER", "Error al leer el archivo")
+			Concatenar("RMUSER" + "Error al leer el archivo")
 			return
 		}
 
@@ -117,7 +116,7 @@ func (rmuser *Rmuser) RemoveUser() {
 		aux += linea + "\n"
 	}
 	if !existe {
-		fmt.Println("No se encontró el usuario  \"" + rmuser.User + "\".")
+		Concatenar("No se encontró el usuario  \"" + rmuser.User + "\".")
 		return
 	}
 	txt = aux
@@ -141,7 +140,7 @@ func (rmuser *Rmuser) RemoveUser() {
 		cadenasS = append(cadenasS, txt)
 	}
 	if len(cadenasS) > 16 {
-		fmt.Println("RMUSER", "Se ha llenado la cantidad de archivos posibles y no se pueden generar más.")
+		Concatenar("RMUSER" + "Se ha llenado la cantidad de archivos posibles y no se pueden generar más.")
 		return
 	}
 	file.Close()
@@ -149,7 +148,7 @@ func (rmuser *Rmuser) RemoveUser() {
 	file, err = os.OpenFile(strings.ReplaceAll(path, "\"", ""), os.O_WRONLY, os.ModeAppend)
 	//file, err := os.Open(strings.ReplaceAll(path, "\"", ""))
 	if err != nil {
-		fmt.Println("RMUSER", "No se ha encontrado el disco.")
+		Concatenar("RMUSER" + "No se ha encontrado el disco.")
 		return
 	}
 
@@ -179,7 +178,7 @@ func (rmuser *Rmuser) RemoveUser() {
 	binary.Write(&inodos, binary.BigEndian, inode)
 	WriteBytes(file, inodos.Bytes())
 
-	fmt.Println("Usuario " + rmuser.User + ", eliminado correctamente!")
+	Concatenar("Usuario " + rmuser.User + ", eliminado correctamente!")
 	if super.S_filesystem_type == 3 {
 		var journalingbytes bytes.Buffer
 		var journaling Structs.Journaling

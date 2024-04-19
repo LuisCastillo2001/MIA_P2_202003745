@@ -4,7 +4,7 @@ import (
 	"Proyecto_1/Structs"
 	"bytes"
 	"encoding/binary"
-	"fmt"
+
 	"os"
 	"strconv"
 	"strings"
@@ -44,20 +44,20 @@ func (rmgrp *Rmgrp) identifyParameters(parameter string) {
 func (rmgrp *Rmgrp) RemoveGroup() {
 
 	if !Compare(Logged.User, "root") {
-		fmt.Println("RMGRP", "Solo el usuario \"root\" puede acceder a estos comandos.")
+		Concatenar("RMGRP" + "Solo el usuario \"root\" puede acceder a estos comandos.")
 		return
 	}
 
 	var path string
 	partition := getMount(Logged.Id, &path)
 	if partition.Part_start == -1 {
-		fmt.Println("No se encontro la partición montada, hubo un fmt.println")
+		Concatenar("No se encontro la partición montada, hubo un Concatenar")
 		return
 	}
 	//file, err := os.OpenFile(strings.ReplaceAll(path, "\"", ""), os.O_WRONLY, os.ModeAppend)
 	file, err := os.Open(strings.ReplaceAll(path, "\"", ""))
 	if err != nil {
-		fmt.Println("Hubo un fmt.println al abrir el disco")
+		Concatenar("Hubo un Concatenar al abrir el disco")
 		return
 	}
 
@@ -67,7 +67,7 @@ func (rmgrp *Rmgrp) RemoveGroup() {
 	buffer := bytes.NewBuffer(data)
 	err_ := binary.Read(buffer, binary.BigEndian, &super)
 	if err_ != nil {
-		fmt.Println("Error al leer el archivo")
+		Concatenar("Error al leer el archivo")
 		return
 	}
 	inode := Structs.NewInodos()
@@ -76,7 +76,7 @@ func (rmgrp *Rmgrp) RemoveGroup() {
 	buffer = bytes.NewBuffer(data)
 	err_ = binary.Read(buffer, binary.BigEndian, &inode)
 	if err_ != nil {
-		fmt.Println("Error al leer el archivo")
+		Concatenar("Error al leer el archivo")
 		return
 	}
 
@@ -93,7 +93,7 @@ func (rmgrp *Rmgrp) RemoveGroup() {
 		err_ = binary.Read(buffer, binary.BigEndian, &fb)
 
 		if err_ != nil {
-			fmt.Println("Error al leer el archivo")
+			Concatenar("Error al leer el archivo")
 			return
 		}
 
@@ -121,7 +121,7 @@ func (rmgrp *Rmgrp) RemoveGroup() {
 		aux += linea + "\n"
 	}
 	if !existe {
-		fmt.Println("No se encontró el grupo \"" + rmgrp.Name + "\".")
+		Concatenar("No se encontró el grupo \"" + rmgrp.Name + "\".")
 		return
 	}
 	txt = aux
@@ -145,7 +145,7 @@ func (rmgrp *Rmgrp) RemoveGroup() {
 		contenido = append(contenido, txt)
 	}
 	if len(contenido) > 16 {
-		fmt.Println("Se ha llenado la cantidad de archivos posibles y no se pueden generar más.")
+		Concatenar("Se ha llenado la cantidad de archivos posibles y no se pueden generar más.")
 		return
 	}
 	file.Close()
@@ -153,7 +153,7 @@ func (rmgrp *Rmgrp) RemoveGroup() {
 	file, err = os.OpenFile(strings.ReplaceAll(path, "\"", ""), os.O_WRONLY, os.ModeAppend)
 	//file, err := os.Open(strings.ReplaceAll(path, "\"", ""))
 	if err != nil {
-		fmt.Println("No se ha encontrado el disco.")
+		Concatenar("No se ha encontrado el disco.")
 		return
 	}
 	for i := 0; i < len(contenido); i++ {
@@ -182,7 +182,7 @@ func (rmgrp *Rmgrp) RemoveGroup() {
 	binary.Write(&inodos, binary.BigEndian, inode)
 	WriteBytes(file, inodos.Bytes())
 
-	fmt.Println("Grupo " + rmgrp.Name + ", eliminado correctamente!")
+	Concatenar("Grupo " + rmgrp.Name + ", eliminado correctamente!")
 	if super.S_filesystem_type == 3 {
 		var journalingbytes bytes.Buffer
 		var journaling Structs.Journaling

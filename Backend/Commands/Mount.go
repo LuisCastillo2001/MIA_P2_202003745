@@ -4,7 +4,6 @@ import (
 	"Proyecto_1/Structs"
 	"bufio"
 	"encoding/binary"
-	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -64,7 +63,7 @@ func (mount *Mount) MountPartition() {
 	path := "MIA/P1/" + mount.Driveletter + ".dsk"
 	file, err := os.OpenFile(path, os.O_RDWR, 0644)
 	if err != nil {
-		fmt.Println("Error al abrir el archivo para lectura:", err)
+		Concatenar("Error al abrir el archivo para lectura:")
 		return
 	}
 	defer file.Close()
@@ -92,7 +91,7 @@ func (mount *Mount) MountPartition() {
 
 	if indice != -1 {
 		if mbr.Partitions[indice].Part_type == 'E' {
-			fmt.Println("La particion no puede ser montada")
+			Concatenar("La particion no puede ser montada")
 			return
 		} else if mbr.Partitions[indice].Part_type == 'P' {
 			comprobar := mbr.Partitions[indice].Part_id
@@ -105,14 +104,14 @@ func (mount *Mount) MountPartition() {
 			}
 
 			if x != 4 {
-				fmt.Println("La particion ya ha sido montada")
+				Concatenar("La particion ya ha sido montada")
 				ShowMounts()
 				return
 			}
 			mount.Addmount()
 			copy(mbr.Partitions[indice].Part_id[:], mount.id)
 			RewriteMBR(&mbr, path)
-			fmt.Println("Particion Montada con éxito")
+			Concatenar("Particion Montada con éxito")
 
 		}
 	}
@@ -126,14 +125,14 @@ func (mount *Mount) MountPartition() {
 		for {
 			_, err := file.Seek(seek, 0)
 			if err != nil {
-				fmt.Println("Error al establecer la posición de escritura:", err)
+				Concatenar("Error al establecer la posición de escritura:")
 				os.Exit(1)
 			}
 
 			reader := bufio.NewReader(file)
 			err = binary.Read(reader, binary.BigEndian, &ebr)
 			if err != nil {
-				fmt.Println("Error al leer el EBR:", err)
+				Concatenar("Error al leer el EBR:")
 				os.Exit(1)
 			}
 
@@ -149,7 +148,7 @@ func (mount *Mount) MountPartition() {
 		}
 
 		if ebr.Part_mount == 1 {
-			fmt.Println("La partición lógica ya fue montada")
+			Concatenar("La partición lógica ya fue montada")
 			return
 		}
 
@@ -157,7 +156,7 @@ func (mount *Mount) MountPartition() {
 		file.Seek(ebr.Part_start, 0)
 		err = binary.Write(file, binary.BigEndian, ebr)
 		mount.Addmount()
-		fmt.Println("Particion lógica Montada con éxito")
+		Concatenar("Particion lógica Montada con éxito")
 
 	}
 
@@ -186,10 +185,10 @@ func (mount *Mount) Addmount() {
 }
 
 func ShowMounts() {
-	fmt.Println("-------Particiones montadas---------")
+	Concatenar("-------Particiones montadas---------")
 	for i := range MountedPartitions {
 		if MountedPartitions[i].Id != "" {
-			fmt.Printf("Disk: %s, Id: %s, PartitionName: %s\n",
+			Concatenar2("Disk: %s, Id: %s, PartitionName: %s\n",
 				MountedPartitions[i].DiskName,
 				MountedPartitions[i].Id,
 				string(MountedPartitions[i].PartitionName[:]),
@@ -219,7 +218,7 @@ func getMount(id string, path2 *string) *Structs.Partition {
 
 	file, err := os.OpenFile(path, os.O_RDWR, 0644)
 	if err != nil {
-		fmt.Println("Error al abrir el archivo para lectura:", err)
+		Concatenar("Error al abrir el archivo para lectura:")
 		return &tmppartition
 	}
 	defer file.Close()
@@ -248,7 +247,7 @@ func getMount(id string, path2 *string) *Structs.Partition {
 
 		var ebr = findLogic(file, MountedPartitions[indice].PartitionName, seek)
 		if ebr == nil {
-			fmt.Println("No se pudo encontrar la particion, verifique que no la haya borrado")
+			Concatenar("No se pudo encontrar la particion, verifique que no la haya borrado")
 			return &tmppartition
 		}
 		tmppartition.Part_type = 'L'

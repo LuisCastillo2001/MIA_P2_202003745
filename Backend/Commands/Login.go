@@ -4,7 +4,7 @@ import (
 	"Proyecto_1/Structs"
 	"bytes"
 	"encoding/binary"
-	"fmt"
+
 	"os"
 	"strconv"
 	"strings"
@@ -68,11 +68,11 @@ func (login *Login) makelogin() bool {
 	var path string
 	partition := getMount(login.id, &path)
 	if Logged.User != "" {
-		fmt.Println("Ya hay un usuario logueado :(")
+		Concatenar("Ya hay un usuario logueado :(")
 		return false
 	}
 	if partition.Part_start == -1 {
-		fmt.Println("No se encontró el id de la partición a la cual hace referencia :(")
+		Concatenar("No se encontró el id de la partición a la cual hace referencia :(")
 		return false
 	}
 
@@ -88,7 +88,7 @@ func (login *Login) makelogin() bool {
 	buffer := bytes.NewBuffer(data)
 	err_ := binary.Read(buffer, binary.BigEndian, &super)
 	if err_ != nil {
-		fmt.Println("Error al leer el archivo")
+		Concatenar("Error al leer el archivo")
 		return false
 	}
 	inode := Structs.NewInodos()
@@ -97,7 +97,7 @@ func (login *Login) makelogin() bool {
 	buffer = bytes.NewBuffer(data)
 	err_ = binary.Read(buffer, binary.BigEndian, &inode)
 	if err_ != nil {
-		fmt.Println("Error al leer el archivo")
+		Concatenar("Error al leer el archivo")
 		return false
 	}
 
@@ -114,7 +114,7 @@ func (login *Login) makelogin() bool {
 		err_ = binary.Read(buffer, binary.BigEndian, &fb)
 
 		if err_ != nil {
-			fmt.Println("Error al leer el archivo")
+			Concatenar("Error al leer el archivo")
 			return false
 		}
 
@@ -124,7 +124,7 @@ func (login *Login) makelogin() bool {
 			}
 		}
 	}
-	fmt.Println("contenido del archivo: ", txt)
+
 	vctr := strings.Split(txt, "\n")
 
 	for i := 0; i < len(vctr)-1; i++ {
@@ -155,11 +155,11 @@ func (login *Login) makelogin() bool {
 					}
 				}
 				if !existe {
-					fmt.Println("Login", "No se encontró el grupo \""+inU[2]+"\".")
+					Concatenar("Login" + "No se encontró el grupo \"" + inU[2] + "\".")
 					return false
 				}
 
-				fmt.Println("Usuario " + login.User + " logeado con éxito")
+				Concatenar("Usuario " + login.User + " logeado con éxito")
 				Logged.Id = login.id
 				Logged.User = login.User
 				Logged.Password = login.Pass
@@ -169,16 +169,16 @@ func (login *Login) makelogin() bool {
 			}
 		}
 	}
-	fmt.Println("No se encontro al usuario")
+	Concatenar("No se encontro al usuario")
 	return false
 }
 
 func Logout() {
 	if Logged.User == "" {
-		fmt.Println("No hay ningún usuario logueado")
+		Concatenar("No hay ningún usuario logueado")
 		return
 	}
 
 	Logged = UsuarioActivo{}
-	fmt.Println("Logout del usuario hecho correctamente :)")
+	Concatenar("Logout del usuario hecho correctamente :)")
 }

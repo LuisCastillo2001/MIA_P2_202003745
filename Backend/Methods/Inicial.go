@@ -18,13 +18,13 @@ func Iniciar() {
 	//Estos son los endpoints que voy a declarar y el tipo de metodo
 	router.HandleFunc("/", inicial).Methods("GET")
 	router.HandleFunc("/MandarArchivo", MandarArchivo).Methods("POST")
-
+	router.HandleFunc("/ListaDiscos", SendDisks).Methods("GET")
+	router.HandleFunc("/ListaParticiones/{disk}", GetPartitions).Methods("GET")
+	router.HandleFunc("/AccederParticion/{disk}/{partition}", Access).Methods("GET")
 	handler := allowCORS(router)
 	fmt.Println("Servidor en http://localhost:3000/")
 	log.Fatal(http.ListenAndServe(":3000", handler))
 }
-
-
 
 func allowCORS(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

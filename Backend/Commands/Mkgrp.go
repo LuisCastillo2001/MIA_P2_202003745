@@ -4,7 +4,7 @@ import (
 	"Proyecto_1/Structs"
 	"bytes"
 	"encoding/binary"
-	"fmt"
+
 	"os"
 	"strconv"
 	"strings"
@@ -44,14 +44,14 @@ func (mkgrp *Mkgrp) IdentifyParameters(parameter string) {
 
 func (mkgrp *Mkgrp) makeGroup() {
 	if Logged.User != "root" {
-		fmt.Println("Lo sentimos, solo el usuario root puede realizar esta acción")
+		Concatenar("Lo sentimos, solo el usuario root puede realizar esta acción")
 		return
 	}
 
 	var path string
 	partition := getMount(Logged.Id, &path)
 	if partition.Part_start == -1 {
-		fmt.Println("La particion no ha sido montada")
+		Concatenar("La particion no ha sido montada")
 		return
 	}
 
@@ -75,7 +75,7 @@ func (mkgrp *Mkgrp) makeGroup() {
 	buffer = bytes.NewBuffer(data)
 	err_ = binary.Read(buffer, binary.BigEndian, &inode)
 	if err_ != nil {
-		fmt.Println("Error al leer el archivo")
+		Concatenar("Error al leer el archivo")
 		return
 	}
 
@@ -92,7 +92,7 @@ func (mkgrp *Mkgrp) makeGroup() {
 		err_ = binary.Read(buffer, binary.BigEndian, &fb)
 
 		if err_ != nil {
-			fmt.Println("Error al leer el archivo")
+			Concatenar("Error al leer el archivo")
 			return
 		}
 
@@ -112,7 +112,7 @@ func (mkgrp *Mkgrp) makeGroup() {
 			in := strings.Split(linea, ",")
 			if in[2] == mkgrp.Name {
 				if linea[0] != '0' {
-					fmt.Println("El nombre del grupo ya existe")
+					Concatenar("El nombre del grupo ya existe")
 					return
 				}
 			}
@@ -140,7 +140,7 @@ func (mkgrp *Mkgrp) makeGroup() {
 		cadenasS = append(cadenasS, txt)
 	}
 	if len(cadenasS) > 16 {
-		fmt.Println("Se ha llenado la cantidad de archivos posibles y no se pueden generar más.")
+		Concatenar("Se ha llenado la cantidad de archivos posibles y no se pueden generar más.")
 		return
 	}
 	file.Close()
@@ -148,7 +148,7 @@ func (mkgrp *Mkgrp) makeGroup() {
 	file, err = os.OpenFile(strings.ReplaceAll(path, "\"", ""), os.O_WRONLY, os.ModeAppend)
 	//file, err := os.Open(strings.ReplaceAll(path, "\"", ""))
 	if err != nil {
-		fmt.Println("No se ha encontrado el disco")
+		Concatenar("No se ha encontrado el disco")
 		return
 	}
 	for i := 0; i < len(cadenasS); i++ {
@@ -186,7 +186,7 @@ func (mkgrp *Mkgrp) makeGroup() {
 	var super2 bytes.Buffer
 	binary.Write(&inodos, binary.BigEndian, super2)
 	WriteBytes(file, super2.Bytes())
-	fmt.Println("Grupo" + mkgrp.Name + ", creado correctamente!")
+	Concatenar("Grupo" + mkgrp.Name + ", creado correctamente!")
 
 	if super.S_filesystem_type == 3 {
 		var journalingbytes bytes.Buffer

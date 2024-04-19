@@ -3,14 +3,11 @@ package Methods
 import (
 	"Proyecto_1/Commands"
 	"encoding/json"
-	"fmt"
 	"net/http"
-	"strings"
 )
 
 func MandarArchivo(w http.ResponseWriter, r *http.Request) {
 	var archivo Filecont
-
 
 	err := json.NewDecoder(r.Body).Decode(&archivo)
 	if err != nil {
@@ -19,12 +16,21 @@ func MandarArchivo(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	lineas := strings.Split(archivo.FileContent, "\n")
+	Commands.LeerComando(archivo.FileContent)
 
-	// Recorrer cada línea e imprimir
-	for _, linea := range lineas {
-		Commands.LeerComando(linea)
+	cadenaJSON, err := json.Marshal(Commands.Cadena)
+	if err != nil {
+		http.Error(w, "Error al serializar el slice Cadena a JSON", http.StatusInternalServerError)
+		return
 	}
-	fmt.Println("fin")
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, err = w.Write(cadenaJSON)
+	if err != nil {
+		http.Error(w, "Error al escribir la respuesta", http.StatusInternalServerError)
+		return
+	}
+	Commands.Cadena = []string{}
 
 }

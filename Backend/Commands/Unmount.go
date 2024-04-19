@@ -5,7 +5,6 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/binary"
-	"fmt"
 	"os"
 	"strings"
 )
@@ -44,7 +43,7 @@ func (unmount *Unmount) UnmountPartition() {
 	partition_unmount := getMount(unmount.Id, &path)
 
 	if partition_unmount.Part_start == -1 {
-		fmt.Println("No se encontro la particion o no ha sido montada")
+		Concatenar("No se encontro la particion o no ha sido montada")
 		return
 	} else {
 		for i := range MountedPartitions {
@@ -56,7 +55,7 @@ func (unmount *Unmount) UnmountPartition() {
 
 			}
 		}
-		fmt.Println("La particion ha sido desmontada con éxito")
+		Concatenar("La particion ha sido desmontada con éxito")
 		ShowMounts()
 	}
 
@@ -67,7 +66,7 @@ func UnmountinDisk(driveletter string, part_start int64, part_type byte) {
 	path := "MIA/P1/" + driveletter + ".dsk"
 	file, err := os.OpenFile(path, os.O_RDWR, 0644)
 	if err != nil {
-		fmt.Println("Error al abrir el archivo para lectura:", err)
+		Concatenar("Error al abrir el archivo para lectura:")
 		return
 	}
 	defer file.Close()
@@ -96,7 +95,7 @@ func UnmountinDisk(driveletter string, part_start int64, part_type byte) {
 
 		_, err := file.Seek(part_start, 0)
 		if err != nil {
-			fmt.Println("Error al establecer la posición de escritura:", err)
+			Concatenar("Error al establecer la posición de escritura:")
 			os.Exit(1)
 		}
 		reader := bufio.NewReader(file)

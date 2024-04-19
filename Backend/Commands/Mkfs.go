@@ -4,7 +4,6 @@ import (
 	"Proyecto_1/Structs"
 	"bytes"
 	"encoding/binary"
-	"fmt"
 	"math"
 	"os"
 	"strings"
@@ -121,7 +120,7 @@ func (mkfs *Mkfs) ext2_ext3(spr Structs.SuperBloque, partition *Structs.Partitio
 
 	file, err := os.OpenFile(strings.ReplaceAll(path, "\"", ""), os.O_WRONLY, os.ModeAppend)
 	if err != nil {
-		fmt.Println("No se encontro el disco")
+		Concatenar("No se encontro el disco")
 		return
 	}
 
@@ -297,7 +296,7 @@ func (mkfs *Mkfs) ext2_ext3(spr Structs.SuperBloque, partition *Structs.Partitio
 		file.Seek(spr.S_bm_inode_start, 0)
 
 		diferencia := spr.S_inodes_count - spr.S_free_inodes_count
-		fmt.Println(diferencia)
+		Concatenar(diferencia)
 		file.Seek(spr.S_bm_inode_start+diferencia, 0)
 		WriteBytes(file, []byte{byte('1')})
 
@@ -305,7 +304,7 @@ func (mkfs *Mkfs) ext2_ext3(spr Structs.SuperBloque, partition *Structs.Partitio
 	*/
 	file.Close()
 	cadena := "MKFS de la particion " + string(partition.Part_name[:]) + " realizado correctamente"
-	fmt.Println(cadena)
+	Concatenar(cadena)
 
 }
 
@@ -316,14 +315,14 @@ file2, err := os.OpenFile(path, os.O_RDWR, 0644)
 		buffer := make([]byte, 1) // Lee un byte en cada iteración
 		_, err := file2.Read(buffer)
 		if err != nil {
-			fmt.Println("Error al leer los bytes:", err)
+			Concatenar("Error al leer los bytes:", err)
 			return
 		}
 
 		// Imprimir el byte leído
 		fmt.Printf("Byte %d: %v\n", i, buffer)
 		if buffer[0] == 1 {
-			fmt.Println("Aquí hay un uno")
+			Concatenar("Aquí hay un uno")
 		}
 	}
 

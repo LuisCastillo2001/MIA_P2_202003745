@@ -20,108 +20,124 @@ func LeerComando(name string) {
 
 		command := strings.Split(name, "-")
 		command_execute := strings.ToLower(strings.ReplaceAll(command[0], " ", ""))
+		//comment := strings.ToLower(command[0])
 
 		if len(command) == 1 && (command_execute == "pause" || strings.HasPrefix(name, "#")) {
 			if command_execute == "pause" {
-				fmt.Println("Ejecutando pausa...")
+				Concatenar("Ejecutando pausa...")
 				fmt.Scanln()
 			} else {
-				fmt.Println("Se leyó un comentario.")
+
+				fmt.Println()
 			}
+
 		} else if command_execute == "mounted" {
 			ShowMounts()
 		} else if command_execute == "logout" {
 			Logout()
 		} else {
 			if command_execute == "mkdisk" {
+
 				parameters := command[1:] // Tomar todos los elementos después del primero
-				fmt.Println("-------COMANDO MKDISK--------")
+				Concatenar("-------COMANDO MKDISK--------")
 				x := NewMKDisk(parameters)
 				if x.Error != "" {
-					fmt.Println(x.Error)
+					Concatenar(x.Error)
 				} else {
-					fmt.Println("DISCO CREADO CORRECTAMENTE")
+					Concatenar("DISCO CREADO CORRECTAMENTE")
 				}
 
 			}
 
 			if command_execute == "rmdisk" {
-				fmt.Println("--------COMANDO RMDISK-------")
+				fmt.Println()
+				Concatenar("--------COMANDO RMDISK-------")
 				Eliminardisco(command[1])
 			}
 
 			if command_execute == "fdisk" {
-				fmt.Println("---------COMANDO FDISK-------")
+				fmt.Println()
+				Concatenar("---------COMANDO FDISK-------")
 				parameters := command[1:]
 				NewFdisk(parameters)
 			}
 
 			if command_execute == "mount" {
-				fmt.Println("----------COMANDO MOUNT---------")
+				fmt.Println()
+				Concatenar("----------COMANDO MOUNT---------")
 				parameters := command[1:]
 				NewMount(parameters)
 			}
 
 			if command_execute == "unmount" {
-				fmt.Println("---------COMANDO UNMOUNT---------")
+				fmt.Println()
+				Concatenar("---------COMANDO UNMOUNT---------")
 				parameters := command[1:]
 				NewUnmount(parameters)
 			}
 
 			if command_execute == "mkfs" {
-				fmt.Println("------------COMANDO MKFS-----------")
+				fmt.Println()
+				Concatenar("------------COMANDO MKFS-----------")
 				parameters := command[1:]
 				NewMkfs(parameters)
 			}
 
 			if command_execute == "login" {
-				fmt.Println("----------COMANDO LOGIN------------")
+				fmt.Println()
+				Concatenar("----------COMANDO LOGIN------------")
 				parameters := command[1:]
 				NewLogin(parameters)
 			}
 
 			if command_execute == "mkgrp" {
-				fmt.Println("----------COMANDO MKGRP------------")
+				fmt.Println()
+				Concatenar("----------COMANDO MKGRP------------")
 				parameters := command[1:]
 				NewMkgrp(parameters)
 			}
 
 			if command_execute == "rmgrp" {
-				fmt.Println("-----------COMANDO RMGRP-----------")
+				fmt.Println()
+				Concatenar("-----------COMANDO RMGRP-----------")
 				parameters := command[1:]
 				newRmgrp(parameters)
 			}
 
 			if command_execute == "mkusr" {
-				fmt.Println("-----------COMANDO MKUSR-----------")
+				Concatenar("-----------COMANDO MKUSR-----------")
 				parameters := command[1:]
 				NewMkusr(parameters)
 			}
 
 			if command_execute == "rmusr" {
-				fmt.Println("-----------COMANDO RMUSR-----------")
+				fmt.Println()
+				Concatenar("-----------COMANDO RMUSR-----------")
 				parameters := command[1:]
 				NewRmuser(parameters)
 			}
 
 			if command_execute == "rep" {
-				fmt.Println("--------GENERACIÓN DE REPORTES-------")
+				fmt.Println()
+				Concatenar("--------GENERACIÓN DE REPORTES-------")
 				parameters := command[1:]
 				NewRep(parameters)
 			}
 
 			if command_execute == "mkdir" {
-				fmt.Println("---------COMANDO MKDIR---------------")
+				fmt.Println()
+				Concatenar("---------COMANDO MKDIR---------------")
 				parameters := command[1:]
 				NewMkdir(parameters)
 			}
 
 			if command_execute == "execute" {
+				fmt.Println()
 				execute(command[1])
 			}
 
 		}
-		delay(2)
+
 		return
 	}
 }
@@ -195,14 +211,14 @@ func findLogic(file *os.File, name [16]byte, seek int64) *Structs.EBR {
 
 		_, err := file.Seek(seek, 0)
 		if err != nil {
-			fmt.Println("Error al establecer la posición de escritura:", err)
+			Concatenar("Error al establecer la posición de escritura:")
 			os.Exit(1)
 		}
 
 		reader := bufio.NewReader(file)
 		err = binary.Read(reader, binary.BigEndian, &ebr)
 		if err != nil {
-			fmt.Println("Error al leer el EBR:", err)
+			Concatenar("Error al leer el EBR:")
 			os.Exit(1)
 		}
 
@@ -251,7 +267,7 @@ func CheckMountedPartitions(file *os.File, diskLetter string) {
 	reader := bufio.NewReader(file)
 	err := binary.Read(reader, binary.BigEndian, &mbr)
 	if err != nil {
-		fmt.Println("Error al leer el MBR:", err)
+		Concatenar("Error al leer el MBR:")
 		return
 	}
 	var seek int64
@@ -300,7 +316,7 @@ func CheckMountedPartitions(file *os.File, diskLetter string) {
 
 			_, err := file.Seek(seek, 0)
 			if err != nil {
-				fmt.Println("Error al establecer la posición de escritura:", err)
+				Concatenar("Error al establecer la posición de escritura:")
 				os.Exit(1)
 			}
 
@@ -310,7 +326,7 @@ func CheckMountedPartitions(file *os.File, diskLetter string) {
 				return
 			}
 			if err != nil {
-				fmt.Println("Error al leer el EBR:", err)
+				Concatenar("Error al leer el EBR:")
 				os.Exit(1)
 			}
 
@@ -359,7 +375,7 @@ func Compare(a string, b string) bool {
 func findfreejournaling(journal_start int64, path string, superbloque Structs.SuperBloque) int64 {
 	file, err := os.Open(strings.ReplaceAll(path, "\"", ""))
 	if err != nil {
-		fmt.Println("MKUSER", "No se ha encontrado el disco.")
+		Concatenar("MKUSER" + "No se ha encontrado el disco.")
 		return -1
 	}
 	file.Seek(journal_start, 0)
@@ -370,7 +386,7 @@ func findfreejournaling(journal_start int64, path string, superbloque Structs.Su
 		buffer := bytes.NewBuffer(data)
 		err_ := binary.Read(buffer, binary.BigEndian, &journaling)
 		if err_ != nil {
-			fmt.Println("MKUSER", "Error al leer el archivo")
+			Concatenar("MKUSER" + "Error al leer el archivo")
 			return -1
 		}
 		if journaling.Active == 0 {

@@ -1,55 +1,110 @@
 
 import * as React from 'react';
 import '../Styles/Proyecto.css'
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 export default function Commands({ showCommands, commands1}) {
    //Que hice, mande un parametro, y en base a ese parametro decido si muestro o no el componente
    //no fue necesario hacer un useState para mostrar o no el componente
   const textareafile = useRef();
   const inputtext = useRef();
-  const [fileContent, setFileContent] = useState("");
+  
+  useEffect(() => {
+    textareafile.current.value = commands1;
+  }, [commands1]);
   
   const handleenviar = () => {
-    if (!textareafile.current.value) {
-      if (!inputtext.current.value) {
-        window.alert('No hay contenido en el archivo ni comando a ejecutar');
-        return;
-      }else{
-        textareafile.current.value = inputtext.current.value;
-      }
-     if (!inputtext.current.value) {
-        window.alert('No hay contenido en el archivo ni comando a ejecutar');
+    let lines = ""
+    if (textareafile.current.value === '') {
+      if (inputtext.current.value === '') {
         return;
       }
+      lines = inputtext.current.value.split('\n');
+      inputtext.current.value = '';
+    }else{
+      lines = textareafile.current.value.split('\n');
+      textareafile.current.value = '';
     }
-    fetch('http://localhost:3000/MandarArchivo', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ fileContent: textareafile.current.value })
-      })
-      .then(response => {
-        if (response.ok) {
-          window.alert('Archivo leído correctamente')
-        } else {
-          console.error('Error al enviar el contenido del archivo al servidor');
-        }
+
+    
+    
+  
+    // Array para almacenar todas las promesas generadas por las solicitudes fetch
+    const fetchPromises = [];
+  
+    lines.forEach((line, index) => {
+      const promise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          fetch('http://localhost:3000/MandarArchivo', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ fileContent: line })
+          })
+            .then(response => {
+              if (response.ok) {
+                return response.json();
+              } else {
+                throw new Error('Error al enviar el contenido del archivo al servidor');
+              }
+            })
+            .then(data => {
+              console.log('Respuesta del servidor:', data);
+              data.forEach(item => {
+                textareafile.current.value += item + '\n';
+                commands1 += item + '\n';
+              });
+              resolve(); // Marcar la promesa como resuelta
+            })
+            .catch(error => {
+              console.error('Error al enviar el contenido del archivo al servidor:', error);
+              reject(error); 
+            });
+        }, index * 2000); 
+      });
+  
+      fetchPromises.push(promise); 
+    });
+  
+   
+    Promise.all(fetchPromises)
+      .then(() => {
+        
+        descargarArchivo('comandos.txt', textareafile.current.value);
       })
       .catch(error => {
-        console.error('Error al enviar el contenido del archivo al servidor:', error);
+        console.error('Error al procesar las solicitudes fetch:', error);
       });
-    
-    
-    };
+  };
 
+  function descargarArchivo(nombreArchivo, contenidoArchivo) {
+    
+    const blob = new Blob([contenidoArchivo], { type: 'text/plain' });
   
+   
+    const url = URL.createObjectURL(blob);
+  
+   
+    const enlaceDescarga = document.createElement('a');
+    enlaceDescarga.href = url;
+    enlaceDescarga.download = nombreArchivo;
+  
+   
+    document.body.appendChild(enlaceDescarga);
+    enlaceDescarga.click();
+  
+    
+    URL.revokeObjectURL(url);
+  
+   
+    document.body.removeChild(enlaceDescarga);
+  }
   
   return (
     
     <div style={{width:'100%', height:'100%'}}>
-      <textarea id='prueba' ref={textareafile} style={{resize:'none', width:'99%', height:'87%', borderRadius:'10px'}} value={commands1}>
+      <textarea id='prueba' ref={textareafile} style={{resize:'none', width:'99%', height:'87%', borderRadius:'10px', fontSize:'15px'}}>
       </textarea>
       <div style={{display:'flex'}}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems:'flex-start' }}>

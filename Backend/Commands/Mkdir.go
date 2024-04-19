@@ -4,7 +4,6 @@ import (
 	"Proyecto_1/Structs"
 	"bytes"
 	"encoding/binary"
-	"fmt"
 	"os"
 	"strings"
 	"time"
@@ -53,13 +52,13 @@ func (mkdir *Mkdir) Makedirectory(pathaux string, numero int) bool {
 	var path string
 	partition := getMount(Logged.Id, &path)
 	if partition.Part_start == -1 {
-		fmt.Println("MKUSER", "No se encontró la partición montada con el id: "+Logged.Id)
+		Concatenar("MKUSER" + "No se encontró la partición montada con el id: " + Logged.Id)
 		return false
 	}
 	//file, err := os.OpenFile(strings.ReplaceAll(path, "\"", ""), os.O_WRONLY, os.ModeAppend)
 	file, err := os.Open(strings.ReplaceAll(path, "\"", ""))
 	if err != nil {
-		fmt.Println("MKDIR", "No se ha encontrado el disco.")
+		Concatenar("MKDIR" + "No se ha encontrado el disco.")
 		return false
 	}
 
@@ -73,7 +72,7 @@ func (mkdir *Mkdir) Makedirectory(pathaux string, numero int) bool {
 	}
 
 	if err_ != nil {
-		fmt.Println("Error al leer el archivo")
+		Concatenar("Error al leer el archivo")
 		return false
 	}
 	path1 := strings.Split(pathaux, "/")
@@ -109,7 +108,7 @@ func (mkdir *Mkdir) Makedirectory(pathaux string, numero int) bool {
 
 				}
 				if nameblock == path1[1] && numero == 0 {
-					fmt.Println("El nombre de la carpeta ya existe")
+					Concatenar("El nombre de la carpeta ya existe")
 					return false
 
 				} else if nameblock == path1[1] && numero == 1 {
@@ -197,7 +196,7 @@ func (mkdir *Mkdir) Makedirectory(pathaux string, numero int) bool {
 					stack += "/" + path2[v]
 				}
 
-				fmt.Println("Se creo la carpeta " + pathtoshow + " en la ubicación " + stack)
+				Concatenar("Se creo la carpeta " + pathtoshow + " en la ubicación " + stack)
 
 				if super.S_filesystem_type == 3 {
 					var journalingbytes bytes.Buffer
@@ -265,7 +264,7 @@ func (mkdir *Mkdir) Makedirectory(pathaux string, numero int) bool {
 							stack += "/" + path2[v]
 						}
 
-						fmt.Println("Se creo la carpeta " + pathtoshow + " en la ubicación " + stack)
+						Concatenar("Se creo la carpeta " + pathtoshow + " en la ubicación " + stack)
 						if super.S_filesystem_type == 3 {
 							var journalingbytes bytes.Buffer
 							var journaling Structs.Journaling
@@ -347,13 +346,13 @@ func (mkdir *Mkdir) Makedirectory(pathaux string, numero int) bool {
 
 		//creacion
 		if fnd1 == false {
-			fmt.Println("No se encontro el directorio padre")
+			Concatenar("No se encontro el directorio padre")
 			return false
 		}
 
 		/*
 			for h := 0; h < 15; h++ {
-				fmt.Println(inodeaux.I_block[h])
+				Concatenar(inodeaux.I_block[h])
 			}
 
 		*/
@@ -382,7 +381,7 @@ func (mkdir *Mkdir) Makedirectory(pathaux string, numero int) bool {
 
 				}
 				if nameblock == namefolder && numero == 0 {
-					fmt.Println("El nombre de la carpeta ya existe")
+					Concatenar("El nombre de la carpeta ya existe")
 					return false
 
 				} else if numero == 1 && nameblock == namefolder {
@@ -395,7 +394,7 @@ func (mkdir *Mkdir) Makedirectory(pathaux string, numero int) bool {
 		file, err = os.Open(strings.ReplaceAll(path, "\"", ""))
 		/*
 			for h := 0; h < 15; h++ {
-				fmt.Println(inodeaux.I_block[h])
+				Concatenar(inodeaux.I_block[h])
 			}
 
 
@@ -481,7 +480,7 @@ func (mkdir *Mkdir) Makedirectory(pathaux string, numero int) bool {
 					stack += "/" + path2[v]
 				}
 
-				fmt.Println("Se creo la carpeta " + pathtoshow + " en la ubicación " + stack)
+				Concatenar("Se creo la carpeta " + pathtoshow + " en la ubicación " + stack)
 				if super.S_filesystem_type == 3 {
 					var journalingbytes bytes.Buffer
 					var journaling Structs.Journaling
@@ -548,7 +547,7 @@ func (mkdir *Mkdir) Makedirectory(pathaux string, numero int) bool {
 							stack += "/" + path2[v]
 						}
 
-						fmt.Println("Se creo la carpeta " + pathtoshow + " en la ubicación " + stack)
+						Concatenar("Se creo la carpeta " + pathtoshow + " en la ubicación " + stack)
 						fnd2 = true
 						if super.S_filesystem_type == 3 {
 							var journalingbytes bytes.Buffer
@@ -572,7 +571,7 @@ func (mkdir *Mkdir) Makedirectory(pathaux string, numero int) bool {
 		}
 
 	}
-	fmt.Println("Hubo un error y algo se creo incorrectamente")
+	Concatenar("Hubo un error y algo se creo incorrectamente")
 	return false
 }
 
@@ -590,12 +589,12 @@ func (mkdir *Mkdir) Createalldirs() {
 		pathaux = pathaux[1:]
 
 		if create == false && len(pathaux) == 0 {
-			fmt.Println("No se pudo crear el directorio")
+			Concatenar("No se pudo crear el directorio")
 			return
 		}
 
 	}
-	fmt.Println("Directorios " + mkdir.Path + " creados con éxito")
+	Concatenar("Directorios " + mkdir.Path + " creados con éxito")
 	//Crear los directorios si estos no existen
 
 }
@@ -604,13 +603,13 @@ func (mkdir *Mkdir) Createalldirs() {
 
 /*
 	if inode.I_type == 1 {
-		fmt.Println("Esto es un bloque de archivos")
-		fmt.Println(inode.I_block[i] - 1)
+		Concatenar("Esto es un bloque de archivos")
+		Concatenar(inode.I_block[i] - 1)
 		file.Seek(super.S_block_start+int64(unsafe.Sizeof(Structs.BloquesCarpetas{}))+int64(unsafe.Sizeof(Structs.BloquesArchivos{}))*(inode.I_block[i]-1), 0)
 		var fb Structs.BloquesArchivos
 		data = ReadBytes(file, int(unsafe.Sizeof(Structs.BloquesArchivos{})))
 		buffer = bytes.NewBuffer(data)
 		err_ = binary.Read(buffer, binary.BigEndian, &fb)
-		fmt.Println()
+		Concatenar()
 	}
 */

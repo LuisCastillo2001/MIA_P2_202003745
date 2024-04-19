@@ -4,7 +4,6 @@ import (
 	"Proyecto_1/Structs"
 	"bytes"
 	"encoding/binary"
-	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -48,20 +47,20 @@ func (mkusr *Mkusr) identifyParameter(parameter string) {
 
 func (mkusr *Mkusr) Makeuser() {
 	if !Compare(Logged.User, "root") {
-		fmt.Println("MKUSER", "Solo el usuario \"root\" puede acceder a estos comandos.")
+		Concatenar("MKUSER" + "Solo el usuario \"root\" puede acceder a estos comandos.")
 		return
 	}
 
 	var path string
 	partition := getMount(Logged.Id, &path)
 	if partition.Part_start == -1 {
-		fmt.Println("MKUSER", "No se encontró la partición montada con el id: "+Logged.Id)
+		Concatenar("MKUSER" + "No se encontró la partición montada con el id: " + Logged.Id)
 		return
 	}
 	//file, err := os.OpenFile(strings.ReplaceAll(path, "\"", ""), os.O_WRONLY, os.ModeAppend)
 	file, err := os.Open(strings.ReplaceAll(path, "\"", ""))
 	if err != nil {
-		fmt.Println("MKUSER", "No se ha encontrado el disco.")
+		Concatenar("MKUSER" + "No se ha encontrado el disco.")
 		return
 	}
 
@@ -71,7 +70,7 @@ func (mkusr *Mkusr) Makeuser() {
 	buffer := bytes.NewBuffer(data)
 	err_ := binary.Read(buffer, binary.BigEndian, &super)
 	if err_ != nil {
-		fmt.Println("MKUSER", "Error al leer el archivo")
+		Concatenar("MKUSER" + "Error al leer el archivo")
 		return
 	}
 	inode := Structs.NewInodos()
@@ -80,7 +79,7 @@ func (mkusr *Mkusr) Makeuser() {
 	buffer = bytes.NewBuffer(data)
 	err_ = binary.Read(buffer, binary.BigEndian, &inode)
 	if err_ != nil {
-		fmt.Println("MKUSER", "Error al leer el archivo")
+		Concatenar("MKUSER" + "Error al leer el archivo")
 		return
 	}
 
@@ -97,7 +96,7 @@ func (mkusr *Mkusr) Makeuser() {
 		err_ = binary.Read(buffer, binary.BigEndian, &fb)
 
 		if err_ != nil {
-			fmt.Println("MKUSER", "Error al leer el archivo")
+			Concatenar("MKUSER" + "Error al leer el archivo")
 			return
 		}
 
@@ -121,7 +120,7 @@ func (mkusr *Mkusr) Makeuser() {
 		}
 	}
 	if !existe {
-		fmt.Println("MKUSER", "No se encontró el grupo \""+mkusr.Grp+"\".")
+		Concatenar("MKUSER" + "No se encontró el grupo \"" + mkusr.Grp + "\".")
 		return
 	}
 
@@ -133,7 +132,7 @@ func (mkusr *Mkusr) Makeuser() {
 			in := strings.Split(linea, ",")
 			if in[3] == mkusr.User {
 				if linea[0] != '0' {
-					fmt.Println("MKUSER", "EL nombre "+mkusr.User+", ya está en uso.")
+					Concatenar("MKUSER" + "EL nombre " + mkusr.User + ", ya está en uso.")
 					return
 				}
 			}
@@ -159,7 +158,7 @@ func (mkusr *Mkusr) Makeuser() {
 		contenido = append(contenido, txt)
 	}
 	if len(contenido) > 16 {
-		fmt.Println("MKUSER", "Se ha llenado la cantidad de archivos posibles y no se pueden generar más.")
+		Concatenar("MKUSER" + "Se ha llenado la cantidad de archivos posibles y no se pueden generar más.")
 		return
 	}
 	file.Close()
@@ -167,7 +166,7 @@ func (mkusr *Mkusr) Makeuser() {
 	file, err = os.OpenFile(strings.ReplaceAll(path, "\"", ""), os.O_WRONLY, os.ModeAppend)
 	//file, err := os.Open(strings.ReplaceAll(path, "\"", ""))
 	if err != nil {
-		fmt.Println("MKUSER", "No se ha encontrado el disco.")
+		Concatenar("MKUSER" + "No se ha encontrado el disco.")
 		return
 	}
 
@@ -209,7 +208,7 @@ func (mkusr *Mkusr) Makeuser() {
 	var super2 bytes.Buffer
 	binary.Write(&super2, binary.BigEndian, super)
 	WriteBytes(file, super2.Bytes())
-	fmt.Println("MKUSER", "Usuario "+mkusr.User+", creado correctamente!")
+	Concatenar("MKUSER" + "Usuario " + mkusr.User + ", creado correctamente!")
 
 	if super.S_filesystem_type == 3 {
 		var journalingbytes bytes.Buffer

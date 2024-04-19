@@ -4,7 +4,7 @@ import { styled, css } from '@mui/system';
 import { Modal as BaseModal } from '@mui/base/Modal';
 import { Button } from '@mui/base/Button';
 import { useSpring, animated } from '@react-spring/web';
-import image from '../Components/anime.jpg'
+import image from '../Images/anime.jpg'
 import '../Styles/Proyecto.css'
 
 export default function SpringModal() {
