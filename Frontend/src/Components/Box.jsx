@@ -5,10 +5,12 @@ import Commands from './Commands';
 import image from '../Images/anime2.jpg';
 import ListDisks from './ListDisks';
 import ListPartitions from './ListPartitions';
+import Login from './Login';
 export default function ContentDisplayBox() {
   const [showCommands, setCommands] = useState(true);
   const [showDisks, setDisks] = useState(false);
   const [showPartitions, setPartitions] = useState(false);
+  const [showLogin, setLogin] = useState(false);
   const [Partitionname, setPartitionname] = useState("");
   const [fileContent, setFileContent] = useState("");
   const [anterior, setAnterior] = useState("Disk");
@@ -31,12 +33,21 @@ export default function ContentDisplayBox() {
     setDisks(false); 
     setPartitions(true);
     setPartitionname(namedisk);
+    setLogin(false);
   };
+
+  const showLogins = () => {
+    setCommands(false);
+    setDisks(false);
+    setPartitions(false);
+    setLogin(true);
+  }
 
   const handleCommandsClick = () => {
     setCommands(true);
     setDisks(false);
     setPartitions(false);
+    setLogin(false);
     
   };
 
@@ -45,12 +56,20 @@ export default function ContentDisplayBox() {
       setCommands(false);
       setDisks(false);
       setPartitions(true);
+      setLogin(false)
       return
     }
     else if (anterior === "Disk"){
       setCommands(false);
       setDisks(true);
       setPartitions(false);
+      setLogin(false)
+      return
+    }else if (anterior === "Login"){
+      setCommands(false);
+      setDisks(false);
+      setPartitions(false);
+      setLogin(true)
       return
     }
   };
@@ -65,6 +84,15 @@ export default function ContentDisplayBox() {
         setCommands(false);
         setDisks(true);
         setPartitions(false);
+        setLogin(false);
+      }
+
+  const returntoPartitions = () =>
+      {
+        setCommands(false);
+        setDisks(false);
+        setPartitions(true);
+        setLogin(false);
       }
   return (
     <>
@@ -101,7 +129,8 @@ export default function ContentDisplayBox() {
 
           {showDisks && <ListDisks showdisks={showDisks} prueba1={handlePruebaClick} changeanterior={changeanterior} />}
           {showCommands && <Commands showCommands={showCommands} commands1={fileContent}/>}
-          {showPartitions && <ListPartitions namedisk={Partitionname} returntodisk={returntodisk} changeanterior={changeanterior} />}
+          {showPartitions && <ListPartitions namedisk={Partitionname} returntodisk={returntodisk} changeanterior={changeanterior} showLogins={showLogins} />}
+          {showLogin && <Login returntoPartitions={returntoPartitions} changeanterior={changeanterior}  />}
         </Box>
 
         <img src={image} alt='imagen' style={{width:'20%', height:'30%', marginLeft:'15px'}} />

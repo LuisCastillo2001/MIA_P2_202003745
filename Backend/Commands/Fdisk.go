@@ -5,7 +5,6 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/binary"
-
 	"os"
 	"strconv"
 	"strings"

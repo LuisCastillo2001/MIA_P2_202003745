@@ -1,7 +1,7 @@
 import React from 'react'
 import partitionimage from '../Images/partition.png';
 import  { useState, useRef } from 'react';
-export default function Partition({name, diskname}) {
+export default function Partition({name, diskname, showLogin}) {
   const [isHovered, setIsHovered] = useState(false);
   const currentpartition = useRef();
   const obtenerParticion = () => {
@@ -13,12 +13,14 @@ export default function Partition({name, diskname}) {
     })
   .then(response => {
     if (!response.ok) {
-      throw new Error('Network response was not ok.');
+      window.alert("Lo sentimos esta partición no tiene un mkfs en el sistema")
+      throw new Error(' Error en la petición');
     }
+    showLogin();
     alert("Peticion enviada con exito")
   })
   .catch(error => {
-    console.error('There was a problem with your fetch operation:', error);
+    console.error('Hubo un problema al hacer el fetch', error);
   });
 
   }
