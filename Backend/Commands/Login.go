@@ -4,7 +4,6 @@ import (
 	"Proyecto_1/Structs"
 	"bytes"
 	"encoding/binary"
-
 	"os"
 	"strconv"
 	"strings"
@@ -24,7 +23,7 @@ var Logged UsuarioActivo
 type Login struct {
 	User       string
 	Pass       string
-	id         string
+	Id         string
 	Parameters []string
 }
 
@@ -32,7 +31,7 @@ func NewLogin(parameters []string) *Login {
 	login := &Login{
 		User:       "",
 		Pass:       "",
-		id:         "",
+		Id:         "",
 		Parameters: parameters,
 	}
 	login.readParameters()
@@ -46,7 +45,7 @@ func (login *Login) readParameters() {
 
 	}
 
-	login.makelogin()
+	login.Makelogin()
 }
 
 func (login *Login) IdentifyParameters(parameter string) {
@@ -60,13 +59,13 @@ func (login *Login) IdentifyParameters(parameter string) {
 	}
 
 	if strings.ToLower(strings.TrimSpace(parameterIdentifier[0])) == "id" {
-		login.id = strings.ToUpper(Stringmake(parameterIdentifier[1]))
+		login.Id = strings.ToUpper(Stringmake(parameterIdentifier[1]))
 	}
 }
 
-func (login *Login) makelogin() bool {
+func (login *Login) Makelogin() bool {
 	var path string
-	partition := getMount(login.id, &path)
+	partition := getMount(login.Id, &path)
 	if Logged.User != "" {
 		Concatenar("Ya hay un usuario logueado :(")
 		return false
@@ -160,7 +159,7 @@ func (login *Login) makelogin() bool {
 				}
 
 				Concatenar("Usuario " + login.User + " logeado con éxito")
-				Logged.Id = login.id
+				Logged.Id = login.Id
 				Logged.User = login.User
 				Logged.Password = login.Pass
 				Logged.Uid, _ = strconv.Atoi(inU[0])

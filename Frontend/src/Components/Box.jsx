@@ -5,6 +5,7 @@ import Commands from './Commands';
 import image from '../Images/anime2.jpg';
 import ListDisks from './ListDisks';
 import ListPartitions from './ListPartitions';
+import Directorys from './Directorys';
 import Login from './Login';
 export default function ContentDisplayBox() {
   const [showCommands, setCommands] = useState(true);
@@ -13,6 +14,7 @@ export default function ContentDisplayBox() {
   const [showLogin, setLogin] = useState(false);
   const [Partitionname, setPartitionname] = useState("");
   const [fileContent, setFileContent] = useState("");
+  const [showDirectorys, setDirectorys] = useState("");
   const [anterior, setAnterior] = useState("Disk");
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -34,6 +36,7 @@ export default function ContentDisplayBox() {
     setPartitions(true);
     setPartitionname(namedisk);
     setLogin(false);
+    setDirectorys(false);
   };
 
   const showLogins = () => {
@@ -41,6 +44,7 @@ export default function ContentDisplayBox() {
     setDisks(false);
     setPartitions(false);
     setLogin(true);
+    setDirectorys(false);
   }
 
   const handleCommandsClick = () => {
@@ -48,8 +52,17 @@ export default function ContentDisplayBox() {
     setDisks(false);
     setPartitions(false);
     setLogin(false);
+    setDirectorys(false);
     
   };
+
+  const handleDirectoryclick = () => {
+    setCommands(false);
+    setDisks(false);
+    setPartitions(false);
+    setLogin(false);
+    setDirectorys(true);
+  }
 
   const handleDisksClick = () => {
     if (anterior === "Part"){
@@ -57,6 +70,7 @@ export default function ContentDisplayBox() {
       setDisks(false);
       setPartitions(true);
       setLogin(false)
+      setDirectorys(false)
       return
     }
     else if (anterior === "Disk"){
@@ -64,12 +78,21 @@ export default function ContentDisplayBox() {
       setDisks(true);
       setPartitions(false);
       setLogin(false)
+      setDirectorys(false)
       return
     }else if (anterior === "Login"){
       setCommands(false);
       setDisks(false);
       setPartitions(false);
       setLogin(true)
+      setDirectorys(false)
+      return
+    }else if (anterior === "Dir"){
+      setCommands(false);
+      setDisks(false);
+      setPartitions(false);
+      setLogin(false)
+      setDirectorys(true)
       return
     }
   };
@@ -78,6 +101,29 @@ export default function ContentDisplayBox() {
     setAnterior(anterior1)
   }
 
+  const Logout = () => {
+    setCommands(false);
+    setDisks(false);
+    setPartitions(false);
+    setLogin(true);
+    setDirectorys(false);
+    fetch('http://localhost:3000/Logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+     
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error(' Error en la petición');
+      }else{
+        window.alert("Se ha cerrado la sesión")
+      }
+      return response.json(); 
+    }).catch(error => {
+      console.error('Hubo un problema al hacer el fetch', error);
+    });
+  }
 
   const returntodisk = () =>
       {
@@ -85,6 +131,7 @@ export default function ContentDisplayBox() {
         setDisks(true);
         setPartitions(false);
         setLogin(false);
+        setDirectorys(false);
       }
 
   const returntoPartitions = () =>
@@ -93,7 +140,10 @@ export default function ContentDisplayBox() {
         setDisks(false);
         setPartitions(true);
         setLogin(false);
+        setDirectorys(false);
       }
+
+
   return (
     <>
       <div style={{ display: 'flex', alignItems:'center', marginTop:'10px', marginLeft:'112px'}}>
@@ -130,7 +180,8 @@ export default function ContentDisplayBox() {
           {showDisks && <ListDisks showdisks={showDisks} prueba1={handlePruebaClick} changeanterior={changeanterior} />}
           {showCommands && <Commands showCommands={showCommands} commands1={fileContent}/>}
           {showPartitions && <ListPartitions namedisk={Partitionname} returntodisk={returntodisk} changeanterior={changeanterior} showLogins={showLogins} />}
-          {showLogin && <Login returntoPartitions={returntoPartitions} changeanterior={changeanterior}  />}
+          {showLogin && <Login returntoPartitions={returntoPartitions} changeanterior={changeanterior} showDirectorys={handleDirectoryclick}  />}
+          {showDirectorys && <Directorys  changeanterior={changeanterior} Logout={Logout} /> } 
         </Box>
 
         <img src={image} alt='imagen' style={{width:'20%', height:'30%', marginLeft:'15px'}} />

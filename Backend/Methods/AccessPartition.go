@@ -5,6 +5,7 @@ import (
 	"Proyecto_1/Structs"
 	"bufio"
 	"encoding/binary"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
@@ -13,11 +14,17 @@ import (
 	"github.com/gorilla/mux"
 )
 
+type Partition_web struct {
+	ID            string `json:"id"`
+	DiskName      string `json:"diskname"`
+	PartitionName string `json:"partitionname"`
+}
+
 func Access(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	disk := vars["disk"]
 	partition := vars["partition"]
-	namedisk := QuitarPunto(disk)
+	namedisk := quitarPunto(disk)
 	for i := 0; i < len(Commands.MountedPartitions); i++ {
 		partName := strings.TrimSpace(string(Commands.MountedPartitions[i].PartitionName[:]))
 		if partName == partition && namedisk == Commands.MountedPartitions[i].DiskName {
@@ -26,6 +33,12 @@ func Access(w http.ResponseWriter, r *http.Request) {
 				http.NotFound(w, r)
 				return
 			}
+			part := Partition_web{
+				ID:            Commands.MountedPartitions[i].Id,
+				DiskName:      Commands.MountedPartitions[i].DiskName,
+				PartitionName: partName,
+			}
+			json.NewEncoder(w).Encode(part)
 			w.WriteHeader(http.StatusOK)
 			return
 		}
@@ -34,7 +47,7 @@ func Access(w http.ResponseWriter, r *http.Request) {
 	http.NotFound(w, r)
 }
 
-func QuitarPunto(cadena string) string {
+func quitarPunto(cadena string) string {
 	cadena_sin_punto := strings.TrimSuffix(cadena, ".dsk")
 	return cadena_sin_punto
 }

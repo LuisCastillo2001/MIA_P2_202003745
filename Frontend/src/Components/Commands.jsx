@@ -29,7 +29,7 @@ export default function Commands({ showCommands, commands1}) {
     
     
   
-    // Array para almacenar todas las promesas generadas por las solicitudes fetch
+   
     const fetchPromises = [];
   
     lines.forEach((line, index) => {

@@ -7,7 +7,14 @@ export default function ListDisks({ showdisks, prueba1, changeanterior }) {
     changeanterior("Disk");
   },[]); 
   useEffect(() => {
-    fetch('http://localhost:3000/ListaDiscos')
+    fetch('http://localhost:3000/ListaDiscos'
+    , {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+  )
       .then(response => {
         if (!response.ok) {
           throw new Error('Error al obtener los datos');

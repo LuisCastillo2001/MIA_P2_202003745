@@ -10,7 +10,14 @@ export default function ListPartitions({namedisk, returntodisk, changeanterior, 
 
   
   useEffect(() => {
-    fetch(`http://localhost:3000/ListaParticiones/${namedisk}`)
+    fetch(`http://localhost:3000/ListaParticiones/${namedisk}`
+    , {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+  )
       .then(response => {
         if (response.ok) {
           return response.json();
