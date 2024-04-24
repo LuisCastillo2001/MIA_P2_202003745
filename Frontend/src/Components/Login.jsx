@@ -2,6 +2,7 @@ import React from 'react'
 import { useEffect, useState } from 'react';
 import { PiKeyReturnBold } from "react-icons/pi";
 import { Box, TextField } from '@mui/material';
+
 import '../Styles/Login.css';
 export default function Login({returntoPartitions, changeanterior, showDirectorys}) {
   const [partitions, setPartitions] = useState([]);
@@ -35,7 +36,7 @@ export default function Login({returntoPartitions, changeanterior, showDirectory
       showDirectorys();
       
     }
-    return response.json(); 
+  
   }).catch(error => {
     console.error('Hubo un problema al hacer el fetch', error);
   });

@@ -23,6 +23,7 @@ func Iniciar() {
 	router.HandleFunc("/AccederParticion/{disk}/{partition}", Access).Methods("GET")
 	router.HandleFunc("/Login", makeLogin).Methods("POST")
 	router.HandleFunc("/Logout", Logout).Methods("POST")
+	router.HandleFunc("/ObtenerDirectorios", Getdirs).Methods("POST")
 	handler := allowCORS(router)
 	fmt.Println("Servidor en http://localhost:3000/")
 	log.Fatal(http.ListenAndServe(":3000", handler))

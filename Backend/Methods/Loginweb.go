@@ -3,7 +3,6 @@ package Methods
 import (
 	"Proyecto_1/Commands"
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
@@ -25,11 +24,8 @@ func makeLogin(w http.ResponseWriter, r *http.Request) {
 		Pass: user.Password,
 		Id:   user.Id,
 	}
-	fmt.Println(user.Id)
-	fmt.Println(user.Password)
-	fmt.Println(user.User)
+
 	x := login.Makelogin()
-	fmt.Println(x)
 	if x == true {
 		w.WriteHeader(http.StatusOK)
 		return

@@ -1,6 +1,7 @@
 package Methods
 
 import (
+	"Proyecto_1/Commands"
 	"encoding/json"
 	"io/ioutil"
 	"log"
@@ -8,7 +9,7 @@ import (
 )
 
 func GetDisks() []string {
-
+	Commands.Logout()
 	dir := "./MIA/P1"
 
 	files, err := ioutil.ReadDir(dir)

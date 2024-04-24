@@ -172,12 +172,13 @@ func (login *Login) Makelogin() bool {
 	return false
 }
 
-func Logout() {
+func Logout() bool {
 	if Logged.User == "" {
 		Concatenar("No hay ningún usuario logueado")
-		return
+		return false
 	}
 
 	Logged = UsuarioActivo{}
 	Concatenar("Logout del usuario hecho correctamente :)")
+	return true
 }

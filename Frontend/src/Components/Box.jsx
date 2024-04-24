@@ -102,6 +102,9 @@ export default function ContentDisplayBox() {
   }
 
   const Logout = () => {
+
+   
+
     setCommands(false);
     setDisks(false);
     setPartitions(false);
@@ -115,7 +118,9 @@ export default function ContentDisplayBox() {
      
     }).then(response => {
       if (!response.ok) {
+        alert("Puede que ya haya un usuario logueado")
         throw new Error(' Error en la petición');
+       
       }else{
         window.alert("Se ha cerrado la sesión")
       }
@@ -184,8 +189,14 @@ export default function ContentDisplayBox() {
           {showDirectorys && <Directorys  changeanterior={changeanterior} Logout={Logout} /> } 
         </Box>
 
-        <img src={image} alt='imagen' style={{width:'20%', height:'30%', marginLeft:'15px'}} />
+        <div style={{ position: 'relative', width: '20%', height: '30%' }}>
+      <img src={image} alt='imagen' style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      <div style={{ position: 'absolute', bottom: 0, left: '20px', width: '100%', textAlign: 'center' }}>
+        <button style={{ border: '2px solid grey' }} onClick={Logout}>Logout</button>
       </div>
+    </div>
+      </div>
+      
     </>
   );
 }

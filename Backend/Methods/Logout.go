@@ -6,5 +6,13 @@ import (
 )
 
 func Logout(w http.ResponseWriter, r *http.Request) {
-	Commands.Logout()
+	x := Commands.Logout()
+
+	if x == false {
+		http.NotFound(w, r)
+		return
+	} else {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
 }
