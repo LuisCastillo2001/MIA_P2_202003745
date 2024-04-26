@@ -44,7 +44,7 @@ func ReturnDirs(disk string, path string, existe *bool) []string {
 	}
 
 	path1 := strings.Split(path, "/")
-	fmt.Println(path1)
+	//fmt.Println(path1)
 	if len(path1) == 2 && path1[1] == "" {
 		for i := 0; i < 16; i++ {
 			file.Seek(super.S_inode_start, 0)

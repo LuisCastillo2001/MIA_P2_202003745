@@ -58,7 +58,7 @@ func (rep *Rep) Makereports() {
 	partition := getMount(rep.Id, &path)
 	fmt.Println("Haciendo el reporte de tipo : ", rep.Name, ", de la particion o disco con el id: "+rep.Id)
 	if partition.Part_start == -1 {
-		fmt.Println("El id de la partición no existe, vuelva a intentarlo")
+		Concatenar("El id de la partición no existe, vuelva a intentarlo")
 		return
 	}
 	//fmt.Println(path)
@@ -404,6 +404,7 @@ func (rep *Rep) Mkrepbminodos(path string, partition *Structs.Partition) {
 				graphdot += "</TR>"
 			}
 			graphdot += "<TR>"
+
 		}
 
 		if b == '1' {
@@ -414,9 +415,9 @@ func (rep *Rep) Mkrepbminodos(path string, partition *Structs.Partition) {
 	}
 
 	// Cerrar la última fila si es necesario
-	if int(superbloque.S_inodes_count)%20 != 0 {
-		graphdot += "</TR>"
-	}
+
+	graphdot += "</TR>"
+
 	graphdot += "</TABLE>>];\n\n}"
 	err2 := rep.generateAndSaveReport(graphdot)
 	if err2 != nil {
@@ -465,9 +466,9 @@ func (rep *Rep) Mkrepbmbloques(path string, partition *Structs.Partition) {
 	}
 
 	// Cerrar la última fila si es necesario
-	if int(superbloque.S_inodes_count)%20 != 0 {
-		graphdot += "</TR>"
-	}
+
+	graphdot += "</TR>"
+
 	graphdot += "</TABLE>>];\n\n}"
 	err2 := rep.generateAndSaveReport(graphdot)
 	if err2 != nil {
@@ -843,7 +844,7 @@ func (rep *Rep) generateAndSaveReport(graphDOT string) error {
 	//dotFilePath := filepath.Join(filepath.Dir(rep.Path), reportName+".dot")
 	x := strings.Split(fileName, ".")
 
-	dotFilePath := "MIA/P1/Reportes/" + x[0] + ".dot"
+	dotFilePath := "MIA/Reportes/" + x[0] + ".dot"
 
 	err := rep.saveGraphToFile(dotFilePath, graphDOT)
 
@@ -852,21 +853,24 @@ func (rep *Rep) generateAndSaveReport(graphDOT string) error {
 		return fmt.Errorf("Error al guardar el archivo DOT: %v", err)
 	}
 
-	// Construir la ruta completa para el archivo de imagen
-	filePath := "MIA/P1/" + fileName
-	format := strings.Split(fileName, ".")
+	/*
+		// Construir la ruta completa para el archivo de imagen
+		filePath := "MIA/REPORTES/" + fileName
+		format := strings.Split(fileName, ".")
 
-	if format[1] == "jpg" || format[1] == "png" {
-		err = rep.convertDotToImage(dotFilePath, filePath)
-	} else {
-		err = rep.convertDotToPdf(dotFilePath, filePath)
-	}
+		if format[1] == "jpg" || format[1] == "png" {
+			err = rep.convertDotToImage(dotFilePath, filePath)
+		} else {
+			err = rep.convertDotToPdf(dotFilePath, filePath)
+		}
 
-	if err != nil {
-		return fmt.Errorf("Error al convertir DOT a imagen: %v", err)
-	}
+		if err != nil {
+			return fmt.Errorf("Error al convertir DOT a imagen: %v", err)
+		}
 
-	fmt.Println("El informe se ha generado correctamente en", filePath)
+		fmt.Println("El informe se ha generado correctamente en", filePath)
+
+	*/
 	return nil
 }
 

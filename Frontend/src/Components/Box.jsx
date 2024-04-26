@@ -7,6 +7,7 @@ import ListDisks from './ListDisks';
 import ListPartitions from './ListPartitions';
 import Directorys from './Directorys';
 import Login from './Login';
+import Reportes from './Reportes';
 export default function ContentDisplayBox() {
   const [showCommands, setCommands] = useState(true);
   const [showDisks, setDisks] = useState(false);
@@ -16,6 +17,7 @@ export default function ContentDisplayBox() {
   const [fileContent, setFileContent] = useState("");
   const [showDirectorys, setDirectorys] = useState("");
   const [anterior, setAnterior] = useState("Disk");
+  const [showReportes, setReportes] = useState(false);
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     
@@ -148,6 +150,16 @@ export default function ContentDisplayBox() {
         setDirectorys(false);
       }
 
+  const handleReportes = () => {
+    setCommands(false);
+    setDisks(false);
+    setPartitions(false);
+    setLogin(false);
+    setDirectorys(false);
+    setReportes(true);
+  }
+    
+
 
   return (
     <>
@@ -180,6 +192,7 @@ export default function ContentDisplayBox() {
           <div style={{ width:'200px', padding: '20px', borderRadius: '5px', backgroundColor:'#cccccc', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', color:'black' }}>
             <button style={{width:'100%', height:'36px', fontSize:'14px', marginTop:'10px'}} onClick={handleCommandsClick}>Enviar Comandos</button>
             <button style={{width:'100%', height:'36px', fontSize:'14px', marginTop:'10px'}} onClick={handleDisksClick}>Discos</button>
+            <button style={{width:'100%', height:'36px', fontSize:'14px', marginTop:'10px'}} onClick={handleReportes}>Reportes</button>
           </div>
 
           {showDisks && <ListDisks showdisks={showDisks} prueba1={handlePruebaClick} changeanterior={changeanterior} />}
