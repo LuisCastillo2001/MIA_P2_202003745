@@ -24,7 +24,7 @@ export default function Partition({name, diskname, showLogin}) {
       const discosave = JSON.stringify(data);
       localStorage.setItem('disk', discosave);
       showLogin();
-      alert("Peticion enviada con exito")
+      alert("La partición si tiene un mkfs ")
     })
     .catch(error => {
       console.error('Hubo un problema al hacer el fetch', error);

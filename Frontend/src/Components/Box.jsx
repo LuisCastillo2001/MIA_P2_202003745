@@ -39,6 +39,7 @@ export default function ContentDisplayBox() {
     setPartitionname(namedisk);
     setLogin(false);
     setDirectorys(false);
+    setReportes(false);
   };
 
   const showLogins = () => {
@@ -47,6 +48,7 @@ export default function ContentDisplayBox() {
     setPartitions(false);
     setLogin(true);
     setDirectorys(false);
+    setReportes(false);
   }
 
   const handleCommandsClick = () => {
@@ -55,6 +57,7 @@ export default function ContentDisplayBox() {
     setPartitions(false);
     setLogin(false);
     setDirectorys(false);
+    setReportes(false);
     
   };
 
@@ -64,6 +67,7 @@ export default function ContentDisplayBox() {
     setPartitions(false);
     setLogin(false);
     setDirectorys(true);
+    setReportes(false);
   }
 
   const handleDisksClick = () => {
@@ -73,6 +77,7 @@ export default function ContentDisplayBox() {
       setPartitions(true);
       setLogin(false)
       setDirectorys(false)
+      setReportes(false);
       return
     }
     else if (anterior === "Disk"){
@@ -81,6 +86,7 @@ export default function ContentDisplayBox() {
       setPartitions(false);
       setLogin(false)
       setDirectorys(false)
+      setReportes(false);
       return
     }else if (anterior === "Login"){
       setCommands(false);
@@ -88,6 +94,7 @@ export default function ContentDisplayBox() {
       setPartitions(false);
       setLogin(true)
       setDirectorys(false)
+      setReportes(false);
       return
     }else if (anterior === "Dir"){
       setCommands(false);
@@ -95,6 +102,7 @@ export default function ContentDisplayBox() {
       setPartitions(false);
       setLogin(false)
       setDirectorys(true)
+      setReportes(false);
       return
     }
   };
@@ -112,6 +120,7 @@ export default function ContentDisplayBox() {
     setPartitions(false);
     setLogin(true);
     setDirectorys(false);
+    setReportes(false);
     fetch('http://localhost:3000/Logout', {
       method: 'POST',
       headers: {
@@ -139,6 +148,7 @@ export default function ContentDisplayBox() {
         setPartitions(false);
         setLogin(false);
         setDirectorys(false);
+        setReportes(false);
       }
 
   const returntoPartitions = () =>
@@ -148,6 +158,7 @@ export default function ContentDisplayBox() {
         setPartitions(true);
         setLogin(false);
         setDirectorys(false);
+        setReportes(false);
       }
 
   const handleReportes = () => {
@@ -177,8 +188,8 @@ export default function ContentDisplayBox() {
 
       <div style={{ display: 'flex', alignItems:'center', marginTop:'10px', marginLeft:'112px'}}>
         <Box
-          height={650}
-          width={1000}
+          height={1150}
+          width={1500}
           my={4}
           display="flex"
           sx={{
@@ -190,7 +201,7 @@ export default function ContentDisplayBox() {
           backgroundColor="#333333"
         >
           <div style={{ width:'200px', padding: '20px', borderRadius: '5px', backgroundColor:'#cccccc', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', color:'black' }}>
-            <button style={{width:'100%', height:'36px', fontSize:'14px', marginTop:'10px'}} onClick={handleCommandsClick}>Enviar Comandos</button>
+            <button style={{width:'100%', height:'48px', fontSize:'14px', marginTop:'10px'}} onClick={handleCommandsClick}>Enviar Comandos</button>
             <button style={{width:'100%', height:'36px', fontSize:'14px', marginTop:'10px'}} onClick={handleDisksClick}>Discos</button>
             <button style={{width:'100%', height:'36px', fontSize:'14px', marginTop:'10px'}} onClick={handleReportes}>Reportes</button>
           </div>
@@ -200,6 +211,7 @@ export default function ContentDisplayBox() {
           {showPartitions && <ListPartitions namedisk={Partitionname} returntodisk={returntodisk} changeanterior={changeanterior} showLogins={showLogins} />}
           {showLogin && <Login returntoPartitions={returntoPartitions} changeanterior={changeanterior} showDirectorys={handleDirectoryclick}  />}
           {showDirectorys && <Directorys  changeanterior={changeanterior} Logout={Logout} /> } 
+          {showReportes && <Reportes />}
         </Box>
 
         <div style={{ position: 'relative', width: '20%', height: '30%' }}>

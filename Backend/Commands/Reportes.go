@@ -56,12 +56,12 @@ func (rep *Rep) identifyParameter(parameter string) {
 func (rep *Rep) Makereports() {
 	path := ""
 	partition := getMount(rep.Id, &path)
-	fmt.Println("Haciendo el reporte de tipo : ", rep.Name, ", de la particion o disco con el id: "+rep.Id)
+	Concatenar("Haciendo el reporte de tipo : " + rep.Name + " de la particion o disco con el id: " + rep.Id)
 	if partition.Part_start == -1 {
 		Concatenar("El id de la partición no existe, vuelva a intentarlo")
 		return
 	}
-	//fmt.Println(path)
+	//Concatenar(path)
 	if rep.Name == "mbr" {
 		rep.Mkrepmbr(path)
 	}
@@ -173,18 +173,18 @@ func (rep *Rep) Mkrepmbr(path string) {
 		for {
 			_, err := file.Seek(seek, 0)
 			if err != nil {
-				fmt.Println("Error al establecer la posición de escritura:", err)
+				Concatenar("Error al establecer la posición de escritura:")
 				return
 			}
 
 			reader := bufio.NewReader(file)
 			err = binary.Read(reader, binary.BigEndian, &ebr)
 			if ebr.Part_start == 0 {
-				fmt.Println("Hubo un error")
+				Concatenar("Hubo un error")
 				return
 			}
 			if err != nil {
-				fmt.Println("Error al leer el EBR:", err)
+				Concatenar("Error al leer el EBR:")
 				return
 			}
 			graphDOT += " <TR>\n  <TD bgcolor=\"orange\" colspan =\"2\">EBR " + "</TD>\n  \n  </TR>"
@@ -219,7 +219,7 @@ func (rep *Rep) Mkrepmbr(path string) {
 	graphDOT += "</TABLE>>];\n\n}"
 	err2 := rep.generateAndSaveReport(graphDOT)
 	if err2 != nil {
-		fmt.Println(err)
+		Concatenar("Hubo un error")
 		return
 	}
 
@@ -232,7 +232,7 @@ func (rep *Rep) Mkrepdisk(path string) {
 	reader := bufio.NewReader(file)
 	err = binary.Read(reader, binary.BigEndian, &mbr)
 	if err != nil {
-		fmt.Println("Hubo un error al abrir el disco")
+		Concatenar("Hubo un error al abrir el disco")
 		return
 	}
 	graphDot := "digraph D {\n    subgraph cluster_0 {\n       " +
@@ -265,7 +265,7 @@ func (rep *Rep) Mkrepdisk(path string) {
 
 				_, err := file.Seek(seek, 0)
 				if err != nil {
-					fmt.Println("Error al establecer la posición de escritura:", err)
+					Concatenar("Error al establecer la posición de escritura:")
 					os.Exit(1)
 				}
 
@@ -273,7 +273,7 @@ func (rep *Rep) Mkrepdisk(path string) {
 				err = binary.Read(reader, binary.BigEndian, &ebr)
 
 				if err != nil {
-					fmt.Println("Error al leer el EBR:", err)
+					Concatenar("Error al leer el EBR:")
 					os.Exit(1)
 				}
 
@@ -328,7 +328,7 @@ func (rep *Rep) Mkrepdisk(path string) {
 	graphDot += "\"];\n    }\n   \n}"
 	err2 := rep.generateAndSaveReport(graphDot)
 	if err2 != nil {
-		fmt.Println(err)
+		Concatenar("Hubo un error")
 		return
 	}
 }
@@ -340,7 +340,7 @@ func (rep *Rep) Mkrepsuperblock(path string, partition *Structs.Partition) {
 	reader := bufio.NewReader(file)
 	err = binary.Read(reader, binary.BigEndian, &superbloque)
 	if err != nil {
-		fmt.Println("Hubo un error al realizar el reporte")
+		Concatenar("Hubo un error al realizar el reporte")
 		return
 	}
 	graphDOT := "digraph G {a0 [shape=none label=<\n" +
@@ -368,7 +368,7 @@ func (rep *Rep) Mkrepsuperblock(path string, partition *Structs.Partition) {
 
 	err2 := rep.generateAndSaveReport(graphDOT)
 	if err2 != nil {
-		fmt.Println(err)
+		Concatenar("Hubo un error")
 		return
 	}
 
@@ -385,16 +385,16 @@ func (rep *Rep) Mkrepbminodos(path string, partition *Structs.Partition) {
 	err = binary.Read(reader, binary.BigEndian, &superbloque)
 	file.Seek(superbloque.S_bm_inode_start, 0)
 	if err != nil {
-		fmt.Println("Hubo un error")
+		Concatenar("Hubo un error")
 		return
 	}
-	for i := 0; i < int(superbloque.S_inodes_count); i++ {
+	for i := 0; i < int(200); i++ {
 		var b byte
 		if err := binary.Read(file, binary.BigEndian, &b); err != nil {
 			if err == io.EOF {
 				break
 			}
-			fmt.Println("Error al leer byte:", err)
+			Concatenar("Error al leer byte:")
 			return
 		}
 
@@ -421,7 +421,7 @@ func (rep *Rep) Mkrepbminodos(path string, partition *Structs.Partition) {
 	graphdot += "</TABLE>>];\n\n}"
 	err2 := rep.generateAndSaveReport(graphdot)
 	if err2 != nil {
-		fmt.Println(err)
+		Concatenar("Hubo un error")
 		return
 	}
 }
@@ -437,16 +437,16 @@ func (rep *Rep) Mkrepbmbloques(path string, partition *Structs.Partition) {
 	err = binary.Read(reader, binary.BigEndian, &superbloque)
 	file.Seek(superbloque.S_bm_block_start, 0)
 	if err != nil {
-		fmt.Println("Hubo un error")
+		Concatenar("Hubo un error")
 		return
 	}
-	for i := 0; i < int(superbloque.S_blocks_count); i++ {
+	for i := 0; i < int(200); i++ {
 		var b byte
 		if err := binary.Read(file, binary.BigEndian, &b); err != nil {
 			if err == io.EOF {
 				break
 			}
-			fmt.Println("Error al leer byte:", err)
+			Concatenar("Error al leer byte:")
 			return
 		}
 
@@ -472,7 +472,7 @@ func (rep *Rep) Mkrepbmbloques(path string, partition *Structs.Partition) {
 	graphdot += "</TABLE>>];\n\n}"
 	err2 := rep.generateAndSaveReport(graphdot)
 	if err2 != nil {
-		fmt.Println(err)
+		Concatenar("Hubo un error")
 		return
 	}
 }
@@ -485,7 +485,7 @@ func (rep *Rep) ReportInodes(path string, partition *Structs.Partition) {
 	reader := bufio.NewReader(file)
 	err = binary.Read(reader, binary.BigEndian, &superbloque)
 	if err != nil {
-		fmt.Println("Hubo un error")
+		Concatenar("Hubo un error")
 		return
 	}
 	var arrinodos []string
@@ -497,7 +497,7 @@ func (rep *Rep) ReportInodes(path string, partition *Structs.Partition) {
 		err = binary.Read(reader, binary.BigEndian, &inodo)
 
 		if err != nil {
-			fmt.Println("Hubo un error")
+			Concatenar("Hubo un error")
 			return
 		}
 		if inodo.I_type == -1 {
@@ -533,7 +533,7 @@ func (rep *Rep) ReportInodes(path string, partition *Structs.Partition) {
 	graphdot += "}"
 	err2 := rep.generateAndSaveReport(graphdot)
 	if err2 != nil {
-		fmt.Println(err)
+		Concatenar("Hubo un error")
 		return
 	}
 
@@ -543,7 +543,7 @@ func (rep *Rep) repBlocks(path string, partition *Structs.Partition) {
 	file, err := os.OpenFile(path, os.O_RDWR, 0644)
 	graphDOT := "digraph TablasConectadas {\n    rankdir = \"LR\"\n    node [shape=plaintext];"
 	if err != nil {
-		fmt.Println("Hubo un error al abrir el archivo")
+		Concatenar("Hubo un error al abrir el archivo")
 		return
 	}
 	var arribloques []string
@@ -559,7 +559,7 @@ func (rep *Rep) repBlocks(path string, partition *Structs.Partition) {
 		reader := bufio.NewReader(file)
 		err = binary.Read(reader, binary.BigEndian, &inode)
 		if err != nil {
-			fmt.Println("Hubo un error al leer el inodo")
+			Concatenar("Hubo un error al leer el inodo")
 			return
 		}
 		if inode.I_type == -1 {
@@ -574,7 +574,7 @@ func (rep *Rep) repBlocks(path string, partition *Structs.Partition) {
 				reader := bufio.NewReader(file)
 				err = binary.Read(reader, binary.BigEndian, &bloque)
 				if err != nil {
-					fmt.Println("Hubo un error al leer el bloque")
+					Concatenar("Hubo un error al leer el bloque")
 					return
 				}
 				graphDOT += "    bloque" + strconv.Itoa(int(inode.I_block[j])) + " [label = <<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">"
@@ -628,7 +628,7 @@ func (rep *Rep) repBlocks(path string, partition *Structs.Partition) {
 	graphDOT += "}"
 	err2 := rep.generateAndSaveReport(graphDOT)
 	if err2 != nil {
-		fmt.Println(err)
+		Concatenar("Hubo un error")
 		return
 	}
 
@@ -641,14 +641,14 @@ func (rep *Rep) journalingreport(path string, partition *Structs.Partition) {
 	reader := bufio.NewReader(file)
 	err = binary.Read(reader, binary.BigEndian, &superbloque)
 	if err != nil {
-		fmt.Println("Hubo un error")
+		Concatenar("Hubo un error")
 		return
 	}
 
 	file.Seek(partition.Part_start+int64(unsafe.Sizeof(Structs.SuperBloque{})), 0)
 
 	if err != nil {
-		fmt.Println("Hubo un error")
+		Concatenar("Hubo un error")
 		return
 	}
 	graphDOT := "digraph G {a0 [shape=none label=<\n" +
@@ -669,7 +669,7 @@ func (rep *Rep) journalingreport(path string, partition *Structs.Partition) {
 		reader := bufio.NewReader(file)
 		err = binary.Read(reader, binary.BigEndian, &journaling)
 		if err != nil {
-			fmt.Println("Hubo un error")
+			Concatenar("Hubo un error")
 			return
 		}
 		if journaling.Active == '1' {
@@ -693,7 +693,7 @@ func (rep *Rep) journalingreport(path string, partition *Structs.Partition) {
 	graphDOT += "</TABLE>>];\n\n}"
 	err2 := rep.generateAndSaveReport(graphDOT)
 	if err2 != nil {
-		fmt.Println(err)
+		Concatenar("Hubo un error")
 		return
 	}
 
@@ -706,7 +706,7 @@ func (rep *Rep) makeTree(path string, partition *Structs.Partition) {
 	reader := bufio.NewReader(file)
 	err = binary.Read(reader, binary.BigEndian, &superbloque)
 	if err != nil {
-		fmt.Println("Hubo un error al leer el inodo")
+		Concatenar("Hubo un error al leer el inodo")
 		return
 	}
 	raiz := Structs.NewInodos()
@@ -723,7 +723,7 @@ func (rep *Rep) makeTree(path string, partition *Structs.Partition) {
 
 	err2 := rep.generateAndSaveReport(graphdot)
 	if err2 != nil {
-		fmt.Println(err)
+		Concatenar("Hubo un error")
 		return
 	}
 
@@ -849,28 +849,13 @@ func (rep *Rep) generateAndSaveReport(graphDOT string) error {
 	err := rep.saveGraphToFile(dotFilePath, graphDOT)
 
 	if err != nil {
-		fmt.Println(err)
+		Concatenar("Hubo un error")
 		return fmt.Errorf("Error al guardar el archivo DOT: %v", err)
 	}
 
-	/*
-		// Construir la ruta completa para el archivo de imagen
-		filePath := "MIA/REPORTES/" + fileName
-		format := strings.Split(fileName, ".")
+	// Construir la ruta completa para el archivo de imagen
+	//filePath := "MIA/Img-rep/" + x[0] + ".pdf"
 
-		if format[1] == "jpg" || format[1] == "png" {
-			err = rep.convertDotToImage(dotFilePath, filePath)
-		} else {
-			err = rep.convertDotToPdf(dotFilePath, filePath)
-		}
-
-		if err != nil {
-			return fmt.Errorf("Error al convertir DOT a imagen: %v", err)
-		}
-
-		fmt.Println("El informe se ha generado correctamente en", filePath)
-
-	*/
 	return nil
 }
 

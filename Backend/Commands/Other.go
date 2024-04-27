@@ -23,13 +23,6 @@ func LeerComando(name string) {
 		//comment := strings.ToLower(command[0])
 
 		if len(command) == 1 && (command_execute == "pause" || strings.HasPrefix(name, "#")) {
-			if command_execute == "pause" {
-				Concatenar("Ejecutando pausa...")
-				fmt.Scanln()
-			} else {
-
-				fmt.Println()
-			}
 
 		} else if command_execute == "mounted" {
 			ShowMounts()
@@ -50,55 +43,55 @@ func LeerComando(name string) {
 			}
 
 			if command_execute == "rmdisk" {
-				fmt.Println()
+				
 				Concatenar("--------COMANDO RMDISK-------")
 				Eliminardisco(command[1])
 			}
 
 			if command_execute == "fdisk" {
-				fmt.Println()
+				
 				Concatenar("---------COMANDO FDISK-------")
 				parameters := command[1:]
 				NewFdisk(parameters)
 			}
 
 			if command_execute == "mount" {
-				fmt.Println()
+				
 				Concatenar("----------COMANDO MOUNT---------")
 				parameters := command[1:]
 				NewMount(parameters)
 			}
 
 			if command_execute == "unmount" {
-				fmt.Println()
+				
 				Concatenar("---------COMANDO UNMOUNT---------")
 				parameters := command[1:]
 				NewUnmount(parameters)
 			}
 
 			if command_execute == "mkfs" {
-				fmt.Println()
+				
 				Concatenar("------------COMANDO MKFS-----------")
 				parameters := command[1:]
 				NewMkfs(parameters)
 			}
 
 			if command_execute == "login" {
-				fmt.Println()
+				
 				Concatenar("----------COMANDO LOGIN------------")
 				parameters := command[1:]
 				NewLogin(parameters)
 			}
 
 			if command_execute == "mkgrp" {
-				fmt.Println()
+				
 				Concatenar("----------COMANDO MKGRP------------")
 				parameters := command[1:]
 				NewMkgrp(parameters)
 			}
 
 			if command_execute == "rmgrp" {
-				fmt.Println()
+				
 				Concatenar("-----------COMANDO RMGRP-----------")
 				parameters := command[1:]
 				newRmgrp(parameters)
@@ -111,28 +104,28 @@ func LeerComando(name string) {
 			}
 
 			if command_execute == "rmusr" {
-				fmt.Println()
+				
 				Concatenar("-----------COMANDO RMUSR-----------")
 				parameters := command[1:]
 				NewRmuser(parameters)
 			}
 
 			if command_execute == "rep" {
-				fmt.Println()
+				
 				Concatenar("--------GENERACIÓN DE REPORTES-------")
 				parameters := command[1:]
 				NewRep(parameters)
 			}
 
 			if command_execute == "mkdir" {
-				fmt.Println()
+				
 				Concatenar("---------COMANDO MKDIR---------------")
 				parameters := command[1:]
 				NewMkdir(parameters)
 			}
 
 			if command_execute == "execute" {
-				fmt.Println()
+				
 				execute(command[1])
 			}
 

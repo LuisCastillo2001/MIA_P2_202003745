@@ -9,7 +9,6 @@ import (
 
 func main() {
 	Commands.ExploreDisks()
-	Commands.ShowMounts()
 	Methods.Iniciar()
 
 }

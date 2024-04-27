@@ -129,10 +129,10 @@ export default function Directorys({Logout, changeanterior}) {
                       id="ruta"
                   />
               </InputGroup>
-              <div style={{display:'flex'}} id = "directorios">
+              <div style={{display:'flex', flexWrap:'wrap'}} id = "directorios">
               {dirs.length > 0 && dirs.map((dir, index) => (
                  <Dirs  name={dir} changeruta={changeruta}  />
-      ))}
+                ))}
                 </div>
           </div>
          

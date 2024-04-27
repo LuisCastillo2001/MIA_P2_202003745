@@ -61,7 +61,7 @@ export default function Commands({ showCommands, commands1}) {
               console.error('Error al enviar el contenido del archivo al servidor:', error);
               reject(error); 
             });
-        }, index * 2000); 
+        }, index * 1000); 
       });
   
       fetchPromises.push(promise); 
@@ -117,7 +117,7 @@ export default function Commands({ showCommands, commands1}) {
             type="text"
             style={{
               backgroundColor: '#333333',
-              width: '600px',
+              width: '700px',
               height: '26px',
               borderRadius: '10px',
               border: '2px solid white',
