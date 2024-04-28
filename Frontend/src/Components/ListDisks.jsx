@@ -7,7 +7,7 @@ export default function ListDisks({ showdisks, prueba1, changeanterior }) {
     changeanterior("Disk");
   },[]); 
   useEffect(() => {
-    fetch('http://localhost:3000/ListaDiscos'
+    fetch('http://54.163.43.245:3000/ListaDiscos'
     , {
       method: 'GET',
       headers: {

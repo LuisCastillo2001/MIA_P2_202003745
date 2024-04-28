@@ -10,7 +10,7 @@ export default function ListPartitions({namedisk, returntodisk, changeanterior, 
 
   
   useEffect(() => {
-    fetch(`http://localhost:3000/ListaParticiones/${namedisk}`
+    fetch(`http://54.163.43.245:3000/ListaParticiones/${namedisk}`
     , {
       method: 'GET',
       headers: {
@@ -29,7 +29,7 @@ export default function ListPartitions({namedisk, returntodisk, changeanterior, 
           setPartitions([]);
           return;
         }
-        console.log('Particiones del disco:', data);
+        
         setPartitions(data); 
       })
       .catch(error => {

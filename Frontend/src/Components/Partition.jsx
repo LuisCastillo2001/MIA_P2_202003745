@@ -5,7 +5,7 @@ export default function Partition({name, diskname, showLogin}) {
   const [isHovered, setIsHovered] = useState(false);
   const currentpartition = useRef();
   const obtenerParticion = () => {
-    fetch(`http://localhost:3000/AccederParticion/${diskname}/${name}`, {
+    fetch(`http://54.163.43.245:3000/AccederParticion/${diskname}/${name}`, {
       method: 'GET', 
       headers: {
         'Content-Type': 'application/json'

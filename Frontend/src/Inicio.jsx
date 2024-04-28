@@ -72,7 +72,7 @@ function Inicio(){
        
       </div>
     
-    <button className='boton_prueba' onClick={handleonclick}>Boton de prueba</button>
+    <button className='boton_prueba' onClick={handleonclick}>Ir al proyecto</button>
      
    
     </div>

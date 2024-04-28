@@ -26,7 +26,7 @@ func Iniciar() {
 	router.HandleFunc("/ObtenerDirectorios", Getdirs).Methods("POST")
 	router.HandleFunc("/Reportes", SendReportes).Methods("GET")
 	handler := allowCORS(router)
-	fmt.Println("Servidor en http://localhost:3000/")
+	fmt.Println("Servidor en el puerto 3000")
 	log.Fatal(http.ListenAndServe(":3000", handler))
 }
 

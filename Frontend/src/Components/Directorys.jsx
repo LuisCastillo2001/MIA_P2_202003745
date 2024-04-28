@@ -28,7 +28,7 @@ export default function Directorys({Logout, changeanterior}) {
         
         }
         changeanterior("Dir");
-        fetch('http://localhost:3000/ObtenerDirectorios', {
+        fetch('http://54.163.43.245:3000/ObtenerDirectorios', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -40,7 +40,7 @@ export default function Directorys({Logout, changeanterior}) {
         return response.json(); 
         
     }).then(data => {
-        console.log(data);
+       
         setDirs(data);
 
 
@@ -67,7 +67,7 @@ export default function Directorys({Logout, changeanterior}) {
             
             searchRuta = ruta
 
-            console.log(searchRuta[searchRuta.length-1]);
+            
 
             if (searchRuta[searchRuta.length-1] != "/") {
                 searchRuta = searchRuta + "/";
@@ -82,7 +82,7 @@ export default function Directorys({Logout, changeanterior}) {
         
         }
         alert("Buscando en: " + searchRuta);
-        fetch('http://localhost:3000/ObtenerDirectorios', {
+        fetch('http://54.163.43.245:3000/ObtenerDirectorios', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

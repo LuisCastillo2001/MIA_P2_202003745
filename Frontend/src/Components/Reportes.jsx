@@ -5,7 +5,7 @@ export default function Reportes() {
   const [reportes, setReportes] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/Reportes',{
+    fetch('http://54.163.43.245:3000/Reportes',{
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -22,7 +22,7 @@ export default function Reportes() {
           return;
         }
         setReportes(data);
-        console.log(data);
+       
       })
       .catch(error => {
         console.error('Error:', error);

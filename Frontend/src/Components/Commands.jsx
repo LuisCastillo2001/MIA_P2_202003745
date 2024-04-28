@@ -35,7 +35,7 @@ export default function Commands({ showCommands, commands1}) {
     lines.forEach((line, index) => {
       const promise = new Promise((resolve, reject) => {
         setTimeout(() => {
-          fetch('http://localhost:3000/MandarArchivo', {
+          fetch('http://54.163.43.245:3000/MandarArchivo', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -50,7 +50,7 @@ export default function Commands({ showCommands, commands1}) {
               }
             })
             .then(data => {
-              console.log('Respuesta del servidor:', data);
+            
               data.forEach(item => {
                 textareafile.current.value += item + '\n';
                 commands1 += item + '\n';

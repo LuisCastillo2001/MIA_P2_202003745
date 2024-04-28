@@ -121,7 +121,7 @@ export default function ContentDisplayBox() {
     setLogin(true);
     setDirectorys(false);
     setReportes(false);
-    fetch('http://localhost:3000/Logout', {
+    fetch('http://54.163.43.245:3000/Logout', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

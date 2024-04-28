@@ -22,7 +22,7 @@ export default function Login({returntoPartitions, changeanterior, showDirectory
       id : iddisk
     }
 
-    fetch('http://localhost:3000/Login', {
+    fetch('http://54.163.43.245:3000/Login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

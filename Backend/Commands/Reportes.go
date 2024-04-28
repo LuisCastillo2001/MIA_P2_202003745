@@ -844,7 +844,7 @@ func (rep *Rep) generateAndSaveReport(graphDOT string) error {
 	//dotFilePath := filepath.Join(filepath.Dir(rep.Path), reportName+".dot")
 	x := strings.Split(fileName, ".")
 
-	dotFilePath := "MIA/Reportes/" + x[0] + ".dot"
+	dotFilePath := "MIA/Reportes" + x[0] + ".dot"
 
 	err := rep.saveGraphToFile(dotFilePath, graphDOT)
 
